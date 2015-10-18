@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Light Puzzle</string>
+    <string name="height">Height</string>
+    <string name="heightValue">5</string>
+    <string name="width">Width</string>
+    <string name="widthValue">5</string>
+    <string name="minusSign">-</string>
+    <string name="plusSign">+</string>
+    <string name="buildPuzzle">Build Puzzle</string>
+    <string name="instructions">Choose the size of your game:</string>
+    <string name="title_activity_game_screen2">GameScreen2</string>
+</resources>
