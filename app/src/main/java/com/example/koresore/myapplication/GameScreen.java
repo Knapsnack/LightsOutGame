@@ -164,10 +164,12 @@ public class GameScreen extends AppCompatActivity {
         return valuesAreEven;
     }
 
-
+    //Return to TitleScreen
     public void newGameButtonClicked(){
         finish();
     }
+
+    //Print whether or not player has succeeded
     public void checkButtonClicked(int gameWidth, int gameHeight){
         TextView textViewWidth = (TextView) findViewById(R.id.isSolved);
         if(valuesAreEven(gameWidth, gameHeight)){
