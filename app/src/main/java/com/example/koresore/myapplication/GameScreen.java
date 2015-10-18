@@ -39,33 +39,41 @@ public class GameScreen extends AppCompatActivity {
         final Button checkButton = (Button) findViewById(R.id.checkButton);
         final Button newGameButton = (Button) findViewById(R.id.buttonNewGame);
 
-        GridLayout lightGridLayout = (GridLayout) findViewById(R.id.gridOfLights);
-        lightGridLayout.invalidate();
 
+        //Dimension Buttons
         int scrWidth = getWindowManager().getDefaultDisplay().getWidth();
-
         Resources r = getResources();
         float gameMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, r.getDisplayMetrics());
 
         int buttonWidth = (scrWidth -  (int)(gameMargin * 2) )/ gameWidth;
         int buttonHeight = (scrWidth) / gameHeight;
 
+        //Dimension Grid
+        GridLayout lightGridLayout = (GridLayout) findViewById(R.id.gridOfLights);
+        lightGridLayout.invalidate();
+
         lightGridLayout.setRowCount(gameHeight);
         lightGridLayout.setColumnCount(gameWidth);
 
 
-        //build buttons
+        //Build buttons
         Button lightGrid[][] = new Button[gameWidth][gameHeight];
 
+        //row j, colunm i
         for (int j = 0; j < gameHeight; j++){
             for (int i = 0; i < gameWidth; i++){
 
+                //Build Button
                 lightGrid[i][j] = new Button(this);
                 lightGrid[i][j].setLayoutParams(new LinearLayout.LayoutParams(buttonWidth, buttonHeight));
-                lightGrid[i][j].setBackgroundColor(Color.GREEN);
-                lightGrid[i][j].setTag(0);
+
+                //id Button
                 lightGrid[i][j].setId((i * 100) + j);
 
+                lightGrid[i][j].setBackgroundColor(Color.GREEN);
+                lightGrid[i][j].setTag(0);
+
+                //for OnClickListener
                 final int finalI = i;
                 final int finalJ = j;
 
@@ -73,24 +81,24 @@ public class GameScreen extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                //Flip color of button pressed
                                 Button centerButton = (Button) findViewById((finalI * 100) + finalJ);
                                 toggleLight(centerButton);
 
+                                //Flip color of related buttons
                                 if (finalI + 1 < gameWidth) {
                                     Button topButton = (Button) findViewById(((finalI + 1) * 100) + finalJ);
                                     toggleLight(topButton);
                                 }
-
                                 if (finalI - 1 >= 0) {
                                     Button bottomButton = (Button) findViewById(((finalI - 1) * 100) + finalJ);
                                     toggleLight(bottomButton);
                                 }
-
                                 if (finalJ - 1 >= 0) {
                                     Button leftButton = (Button) findViewById((finalI * 100) + (finalJ - 1));
                                     toggleLight(leftButton);
                                 }
-
                                 if (finalJ + 1 < gameHeight) {
                                     Button rightButton = (Button) findViewById((finalI * 100) + (finalJ + 1));
                                     toggleLight(rightButton);
@@ -105,6 +113,7 @@ public class GameScreen extends AppCompatActivity {
             }
         }
 
+        //Randomly decide which game buttons to press and press them
         for (int j = 0; j < gameHeight; j++){
             for (int i = 0; i < gameWidth; i++){
                 if (Math.random() * 2 < 1){
@@ -113,6 +122,7 @@ public class GameScreen extends AppCompatActivity {
             }
         }
 
+        //Click listeners
         newGameButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -121,7 +131,6 @@ public class GameScreen extends AppCompatActivity {
                     }
                 }
         );
-
         checkButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -132,6 +141,7 @@ public class GameScreen extends AppCompatActivity {
         );
     }
 
+    //Toggles the color of the button passed
     public void toggleLight(Button button){
         if((int) button.getTag() == 0){
             button.setBackgroundColor(Color.RED);
@@ -142,6 +152,7 @@ public class GameScreen extends AppCompatActivity {
         }
     }
 
+    //Returns true iff all values in gameWidth x gameHeight set are equal
     public Boolean valuesAreEven(int gameWidth, int gameHeight){
         Boolean valuesAreEven = true;
         int value = (int) findViewById(0).getTag();

@@ -15,11 +15,14 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
+        //Initialize Buttons
         final Button buttonIncreaseHeight = (Button)findViewById(R.id.buttonIncreaseHeight);
         final Button buttonIncreaseWidth = (Button)findViewById(R.id.buttonIncreaseWidth);
         final Button buttonDecreaseHeight = (Button)findViewById(R.id.buttonDecreaseHeight);
         final Button buttonDecreaseWidth = (Button)findViewById(R.id.buttonDecreaseWidth);
         final Button buttonBuildPuzzle = (Button)findViewById(R.id.buttonBuildPuzzle);
+
+        //Set On-Click Listeners
         buttonIncreaseWidth.setOnClickListener(
                 new Button.OnClickListener(){
                     public void onClick(View v) {
@@ -37,7 +40,6 @@ public class MainMenu extends AppCompatActivity {
                     }
                 }
         );
-
         buttonDecreaseWidth.setOnClickListener(
                 new Button.OnClickListener(){
                     public void onClick(View v) {
@@ -55,7 +57,6 @@ public class MainMenu extends AppCompatActivity {
                     }
                 }
         );
-
         buttonIncreaseHeight.setOnClickListener(
                 new Button.OnClickListener(){
                     public void onClick(View v) {
@@ -73,7 +74,6 @@ public class MainMenu extends AppCompatActivity {
                     }
                 }
         );
-
         buttonDecreaseHeight.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
@@ -91,10 +91,10 @@ public class MainMenu extends AppCompatActivity {
                     }
                 }
         );
-
         buttonBuildPuzzle.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
+                        //Starts code in game, passing gameHeight and gameWidth user selected
                         Intent intent = new Intent(MainMenu.this, GameScreen.class);
 
                         TextView textViewHeight = (TextView) findViewById(R.id.textHeightValue);
