@@ -1,20 +1,14 @@
 package com.example.koresore.myapplication;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
@@ -73,6 +67,8 @@ public class GameScreen extends AppCompatActivity {
                 lightGrid[i][j].setBackgroundColor(Color.GREEN);
                 lightGrid[i][j].setTag(0);
 
+                lightGrid[i][j].setPadding(0, 0, 0, 0);
+
                 //for OnClickListener
                 final int finalI = i;
                 final int finalJ = j;
@@ -84,7 +80,7 @@ public class GameScreen extends AppCompatActivity {
 
                                 //Flip color of button pressed
                                 Button centerButton = (Button) findViewById((finalI * 100) + finalJ);
-                                toggleLight(centerButton);
+                                togglePressed(centerButton);
 
                                 //Flip color of related buttons
                                 if (finalI + 1 < gameWidth) {
@@ -103,6 +99,12 @@ public class GameScreen extends AppCompatActivity {
                                     Button rightButton = (Button) findViewById((finalI * 100) + (finalJ + 1));
                                     toggleLight(rightButton);
                                 }
+
+                                //Check to see if game is won
+                                checkSolved(gameWidth, gameHeight);
+
+                                //Clear Hints if the exists
+                                ClearHints(gameWidth, gameHeight);
                             }
                         }
                 );
@@ -135,20 +137,51 @@ public class GameScreen extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        checkButtonClicked(gameWidth, gameHeight);
+                        giveHint(gameWidth, gameHeight);
                     }
                 }
         );
     }
 
-    //Toggles the color of the button passed
-    public void toggleLight(Button button){
-        if((int) button.getTag() == 0){
-            button.setBackgroundColor(Color.RED);
-            button.setTag(1);
+    //Toggles the pressed state of light, the left digit (0 is solved position).
+    public void togglePressed(Button button){
+        if((int) button.getTag() >= 10){
+            if ((int) button.getTag() == 10) {
+                button.setBackgroundColor(Color.RED);
+                button.setTag(1);
+            } else {
+                button.setBackgroundColor(Color.GREEN);
+                button.setTag(0);
+            }
         } else {
-            button.setBackgroundColor(Color.GREEN);
-            button.setTag(0);
+            if ((int) button.getTag() == 0) {
+                button.setBackgroundColor(Color.RED);
+                button.setTag(11);
+            } else {
+                button.setBackgroundColor(Color.GREEN);
+                button.setTag(10);
+            }
+        }
+    }
+
+    //Toggles the color of the button passed, the right digit.
+    public void toggleLight(Button button){
+        if((int) button.getTag() >= 10){
+            if ((int) button.getTag() == 10) {
+                button.setBackgroundColor(Color.RED);
+                button.setTag(11);
+            } else {
+                button.setBackgroundColor(Color.GREEN);
+                button.setTag(10);
+            }
+        } else {
+            if ((int) button.getTag() == 0) {
+                button.setBackgroundColor(Color.RED);
+                button.setTag(1);
+            } else {
+                button.setBackgroundColor(Color.GREEN);
+                button.setTag(0);
+            }
         }
     }
 
@@ -164,18 +197,46 @@ public class GameScreen extends AppCompatActivity {
         return valuesAreEven;
     }
 
+    //Tells user the number of times each button needs to be pressed
+    public void giveHint(int gameWidth, int gameHeight){
+        for (int i = 0; i < gameWidth; i++){
+            for (int j = 0; j < gameHeight; j++) {
+                int stateOfButton = (int) findViewById((i * 100) + j).getTag();
+                int numberToReturn = 0;
+                while(stateOfButton >= 10){
+                    numberToReturn ++;
+                    stateOfButton -= 10;
+                }
+                Button button = (Button) findViewById((i * 100) + j);
+                button.setText(numberToReturn + "");
+            }
+        }
+    }
+
+    //Clears the hints if the first button has a hint
+    public void ClearHints(int gameWidth, int gameHeight){
+        Button probeButton = (Button) findViewById(0);
+        if (probeButton.getText() != "") {
+            for (int i = 0; i < gameWidth; i++) {
+                for (int j = 0; j < gameHeight; j++) {
+                    Button b = (Button) findViewById((i * 100) + j);
+                    b.setText("");
+                }
+            }
+        }
+    }
+
     //Return to TitleScreen
     public void newGameButtonClicked(){
         finish();
     }
 
     //Print whether or not player has succeeded
-    public void checkButtonClicked(int gameWidth, int gameHeight){
+    public void checkSolved(int gameWidth, int gameHeight){
         TextView textViewWidth = (TextView) findViewById(R.id.isSolved);
         if(valuesAreEven(gameWidth, gameHeight)){
             textViewWidth.setText("You did it!");
-        }else{
-            textViewWidth.setText("You have failed.");
+            getWindow().getDecorView().setBackgroundColor(Color.rgb(220, 255, 255));
         }
     }
 
